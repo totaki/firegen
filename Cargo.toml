@@ -1,0 +1,8 @@
+[package]
+name = "firegen"
+version = "0.1.0"
+authors = ["Sergey Emelyanov <karagabul@gmail.com>"]
+
+[dependencies]
+yaml-rust = "0.3"
+tera = "0.10"

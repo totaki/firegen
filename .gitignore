@@ -1,0 +1,6 @@
+/target/
+temp
+.idea
+firegen.yml
+**/*.rs.bk
+
