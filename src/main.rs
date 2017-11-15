@@ -1,6 +1,6 @@
 extern crate tera;
-
 extern crate yaml_rust;
+mod handlers;
 
 use std::fs::File;
 use std::io::prelude::*;
@@ -23,5 +23,6 @@ fn main() {
     ctx.add("name", &name);
     let rendered = tera.render("react-component.template", &ctx).expect("Failed to render template");
     println!("{}", rendered);
-
+    let react = handlers::react::ReactStateless::new(32);
+    react.print_name();
 }
