@@ -1,13 +1,11 @@
-pub struct ReactStateless {
-    name: String
+pub struct ReactStateless<'a> {
+    name: &'a str
 }
 
-impl ReactStateless {
+impl<'a>  ReactStateless<'a>  {
 
-    pub fn new<S>(name: S) -> Self
-        where S: Into<String> {
-        
-        ReactStateless { name: name.into() }
+    pub fn new(name: &str) -> ReactStateless {
+        ReactStateless { name }
     }
 
     pub fn print_name(&self) {

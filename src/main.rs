@@ -24,5 +24,8 @@ fn main() {
     let rendered = tera.render("react-component.template", &ctx).expect("Failed to render template");
     println!("{}", rendered);
     let react = handlers::react::ReactStateless::new("Hello");
+
+    let react1 = handlers::react::ReactStateless::new("Hello1");
+    react1.print_name();
     react.print_name();
 }
