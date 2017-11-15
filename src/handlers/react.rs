@@ -4,8 +4,10 @@ pub struct ReactStateless {
 
 impl ReactStateless {
 
-    pub fn new(name: &str) -> Self {
-        ReactStateless { name: name.to_string() }
+    pub fn new<S>(name: S) -> Self
+        where S: Into<String> {
+        
+        ReactStateless { name: name.into() }
     }
 
     pub fn print_name(&self) {
