@@ -1,11 +1,11 @@
 pub struct ReactStateless {
-    name: i32
+    name: String
 }
 
 impl ReactStateless {
 
-    pub fn new(name: i32) -> Self {
-        ReactStateless { name }
+    pub fn new(name: &str) -> Self {
+        ReactStateless { name: name.to_string() }
     }
 
     pub fn print_name(&self) {
