@@ -6,3 +6,4 @@ authors = ["Sergey Emelyanov <karagabul@gmail.com>"]
 [dependencies]
 yaml-rust = "0.3"
 tera = "0.10"
+clap="2.7"
