@@ -15,19 +15,28 @@ fn main() {
                           .author("Sergey Emelyanov <karagabul@gmail.com>")
                           .about("This application help create Python or ReactJS files from templates")
                           .arg(Arg::with_name("input")
+                               .short("i")
+                               .long("input")
                                .help("Sets the input file to use, format .yml")
-                               .required(true)
-                               .index(1))
+                               .takes_value(true))
                           .arg(Arg::with_name("output")
+                               .short("o")
+                               .long("output")
                                .help("Sets the output path where save result")
-                               .required(true)
-                               .index(2))
+                               .takes_value(true))
                           .arg(Arg::with_name("path")
+                               .short("p")
+                               .long("path")
                                .help("Sets the path where stored templates")
-                               .required(true)
-                               .index(3))
+                               .takes_value(true))
                           .get_matches();
+    let input_file = matches.value_of("input").unwrap_or("./firegen.yml");
+    let output_path = matches.value_of("output").unwrap_or(".");
+    let template_path = matches.value_of("path").unwrap_or("~/.firegen");
 
+    println!("{}", input_file);
+    println!("{}", output_path);
+    println!("{}", template_path);
 //    let tera = Tera::new("templates/**/*").expect("Failed to render template");
 //    let mut f = File::open("firegen.yml").expect("file not found");
 //    let mut contents = String::new();
