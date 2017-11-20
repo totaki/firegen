@@ -1,5 +1,5 @@
 extern crate clap;
-use clap::{Arg, App, SubCommand};
+use self::clap::{Arg, App, SubCommand};
 
 
 pub struct RunArgs {
@@ -41,8 +41,8 @@ pub fn get_args() -> RunArgs {
         .to_owned();
 
     let path= matches
-        .value_of("oath")
-        .unwrap_or("~/firegen.yml")
+        .value_of("path")
+        .unwrap_or("~/.firegen")
         .to_owned();
 
     RunArgs { input, output, path }

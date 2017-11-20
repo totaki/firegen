@@ -1,6 +1,5 @@
 extern crate tera;
 extern crate yaml_rust;
-extern crate clap;
 mod handlers;
 mod utils;
 
@@ -8,38 +7,46 @@ use std::fs::File;
 use std::io::prelude::*;
 use yaml_rust::{YamlLoader};
 use tera::{Context, Tera};
-use clap::{Arg, App, SubCommand};
+
+use std::path::Path;
+
 
 fn main() {
-//    let matches = App::new("Firegen")
-//                          .version("0.1.0")
-//                          .author("Sergey Emelyanov <karagabul@gmail.com>")
-//                          .about("This application help create Python or ReactJS files from templates")
-//                          .arg(Arg::with_name("input")
-//                               .short("i")
-//                               .long("input")
-//                               .help("Sets the input file to use, format .yml")
-//                               .takes_value(true))
-//                          .arg(Arg::with_name("output")
-//                               .short("o")
-//                               .long("output")
-//                               .help("Sets the output path where save result")
-//                               .takes_value(true))
-//                          .arg(Arg::with_name("path")
-//                               .short("p")
-//                               .long("path")
-//                               .help("Sets the path where stored templates")
-//                               .takes_value(true))
-//                          .get_matches();
-//    let input_file = matches.value_of("input").unwrap_or("./firegen.yml");
-//    let output_path = matches.value_of("output").unwrap_or(".");
-//    let template_path = matches.value_of("path").unwrap_or("~/.firegen");
-
 
     let run_args = utils::cli_args::get_args();
-    println!("{}", run_args.input);
-    println!("{}", run_args.output);
-    println!("{}", run_args.path);
+    let mut can_run = true;
+
+    if !Path::new(run_args.input.as_str()).exists() {
+        println!("Input file not exists: {}", run_args.input);
+        can_run = false;
+    }
+
+    if !Path::new(run_args.output.as_str()).exists() {
+        println!("Output path not exists: {}", run_args.output);
+        can_run = false;
+    }
+
+    if !Path::new(run_args.path.as_str()).exists() {
+        println!("Template path not exists: {}", run_args.path);
+        can_run = false;
+    }
+
+
+    if can_run {
+        let mut input_file = File::open(run_args.input).expect("File not exists");
+        let mut input_string = String::new();
+        input_file.read_to_string(&mut input_string)
+            .expect("something went wrong reading the file");
+
+        let docs = YamlLoader::load_from_str(&input_string)
+            .expect("Cannot parse input .yml");
+        let doc = &docs[0];
+        let react = handlers::react::ReactStateless::new("Hello");
+        react.render(&doc);
+
+    }
+
+
 //    let tera = Tera::new("templates/**/*").expect("Failed to render template");
 //    let mut f = File::open("firegen.yml").expect("file not found");
 //    let mut contents = String::new();
