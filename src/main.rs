@@ -11,6 +11,9 @@ use tera::{Context, Tera};
 use std::path::Path;
 
 
+const REACT_COMPONENT: &str = "react-component.template";
+
+
 fn main() {
 
     let run_args = utils::cli_args::get_args();
@@ -31,7 +34,6 @@ fn main() {
         can_run = false;
     }
 
-
     if can_run {
         let mut input_file = File::open(run_args.input).expect("File not exists");
         let mut input_string = String::new();
@@ -41,29 +43,21 @@ fn main() {
         let docs = YamlLoader::load_from_str(&input_string)
             .expect("Cannot parse input .yml");
         let doc = &docs[0];
-        let react = handlers::react::ReactStateless::new("Hello");
-        react.render(&doc);
+        let template_name = doc["files"]["template"].as_str();
+
+        let temp = "react-component.template";
+        let handler = match Some(template_name) {
+             Some("react-component.template") => handlers::react::ReactStateless::new(
+                doc["files"]["name"].as_str().unwrap()
+             ),
+             _ => println!("Template '{}' not exists", template_name)
+
+        };
+
+        let tera = Tera::new("templates/**/*").expect("Failed to render template");
+        let mut ctx = Context::new();
+        handler.render(tera, ctx, "react-component.template");
 
     }
 
-
-//    let tera = Tera::new("templates/**/*").expect("Failed to render template");
-//    let mut f = File::open("firegen.yml").expect("file not found");
-//    let mut contents = String::new();
-//    f.read_to_string(&mut contents)
-//        .expect("something went wrong reading the file");
-//
-//    let docs = YamlLoader::load_from_str(&contents).expect("Fuck rust");
-//    let doc = &docs[0];
-//
-//    let mut ctx = Context::new();
-//    let name = doc["files"]["name"].as_str().unwrap();
-//    ctx.add("name", &name);
-//    let rendered = tera.render("react-component.template", &ctx).expect("Failed to render template");
-//    println!("{}", rendered);
-//    let react = handlers::react::ReactStateless::new("Hello");
-//
-//    let react1 = handlers::react::ReactStateless::new("Hello1");
-//    react1.print_name();
-//    react.print_name();
 }
