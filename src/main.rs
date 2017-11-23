@@ -5,13 +5,10 @@ mod utils;
 
 use std::fs::File;
 use std::io::prelude::*;
-use yaml_rust::{YamlLoader};
+use yaml_rust::{Yaml, YamlLoader};
+use std::hash::Hash;
 use tera::{Context, Tera};
-
-use std::path::Path;
-
-
-const REACT_COMPONENT: &str = "react-component.template";
+use std::path::{Path, PathBuf};
 
 
 fn main() {
@@ -45,19 +42,19 @@ fn main() {
         let doc = &docs[0];
         let template_name = doc["files"]["template"].as_str();
 
-        let temp = "react-component.template";
-        let handler = match Some(template_name) {
-             Some("react-component.template") => handlers::react::ReactStateless::new(
-                doc["files"]["name"].as_str().unwrap()
-             ),
-             _ => println!("Template '{}' not exists", template_name)
-
-        };
-
-        let tera = Tera::new("templates/**/*").expect("Failed to render template");
         let mut ctx = Context::new();
-        handler.render(tera, ctx, "react-component.template");
-
+        for (key, value) in doc["files"]["properties"].as_hash().unwrap().iter() {
+            ctx.add(key.as_str().unwrap(), &value.as_str().unwrap());
+        }
+        let tera = Tera::new("templates/**/*").expect("Failed to render template");
+        let render_result = tera.render(&template_name.unwrap(), &ctx);
+        let mut output = String::new();
+        output.push_str(doc["files"]["properties"]["name"].as_str().unwrap());
+        output.push_str(".");
+        output.push_str(doc["files"]["extension"].as_str().unwrap());
+        let path =  Path::new(run_args.output.as_str()).join(output.as_str());
+        let mut output_file = File::create(path).expect("Cant create file");
+        output_file.write_all(render_result.unwrap().as_bytes());
     }
 
 }

@@ -16,14 +16,4 @@ impl<'a>  ReactStateless<'a>  {
         ReactStateless { name }
     }
 
-    pub fn print_name(&self) {
-        println!("{}", self.name);
-    }
-
-    pub fn render(&self, t: Tera, c: Context, tn: &str) {
-//        c.add("name", &self.name);
-//        let rendered = t.render(tn, &c)
-//            .expect("Failed to render template");
-//        println!("{}", rendered);
-    }
 }
