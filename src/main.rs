@@ -9,7 +9,8 @@ use yaml_rust::{Yaml, YamlLoader};
 use std::hash::Hash;
 use tera::{Context, Tera};
 use std::path::{Path, PathBuf};
-
+use handlers::react;
+use handlers::BaseHandler;
 
 fn main() {
 
@@ -46,6 +47,9 @@ fn main() {
         for (key, value) in doc["files"]["properties"].as_hash().unwrap().iter() {
             ctx.add(key.as_str().unwrap(), &value.as_str().unwrap());
         }
+
+        println!("{:?}", react::ReactStateless.is_current(template_name.unwrap()));
+
         let tera = Tera::new("templates/**/*").expect("Failed to render template");
         let render_result = tera.render(&template_name.unwrap(), &ctx);
         let mut output = String::new();

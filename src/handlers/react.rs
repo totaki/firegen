@@ -1,19 +1,20 @@
 extern crate yaml_rust;
 extern crate tera;
-
+use handlers::BaseHandler;
 use self::yaml_rust::{Yaml};
 use self::tera::{Context, Tera};
 
-pub static TEMPLATE: &str = "react-component.template";
+const TEMPLATE: &str = "react-component.template";
 
-pub struct ReactStateless<'a> {
-    name: &'a str,
+pub struct ReactStateless;
+
+impl ReactStateless  {
+
 }
 
-impl<'a>  ReactStateless<'a>  {
+impl BaseHandler for ReactStateless {
 
-    pub fn new(name: &str) -> ReactStateless {
-        ReactStateless { name }
+    fn is_current(&self, s: &str) -> bool {
+        ReactStateless::compare_strings(s, TEMPLATE)
     }
-
 }
