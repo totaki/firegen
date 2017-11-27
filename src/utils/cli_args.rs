@@ -1,5 +1,5 @@
 extern crate clap;
-use self::clap::{Arg, App, SubCommand};
+use self::clap::{Arg, App};
 
 
 pub struct RunArgs {

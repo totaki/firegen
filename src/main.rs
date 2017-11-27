@@ -5,12 +5,10 @@ mod utils;
 
 use std::fs::File;
 use std::io::prelude::*;
-use yaml_rust::{Yaml, YamlLoader};
-use std::hash::Hash;
+use yaml_rust::{YamlLoader};
 use tera::{Context, Tera};
-use std::path::{Path, PathBuf};
+use std::path::{Path};
 use handlers::react;
-use handlers::BaseHandler;
 
 fn main() {
 
@@ -41,24 +39,31 @@ fn main() {
         let docs = YamlLoader::load_from_str(&input_string)
             .expect("Cannot parse input .yml");
         let doc = &docs[0];
-        let template_name = doc["files"]["template"].as_str();
+        let template_name = doc["files"]["template"].as_str().unwrap();
 
         let mut ctx = Context::new();
-        for (key, value) in doc["files"]["properties"].as_hash().unwrap().iter() {
-            ctx.add(key.as_str().unwrap(), &value.as_str().unwrap());
+
+        match template_name {
+            react::TEMPLATE => react::fill_context(&doc, &mut ctx),
+            _ => println!("Template '{}' not exists", template_name)
         }
 
-        println!("{:?}", react::ReactStateless.is_current(template_name.unwrap()));
-
         let tera = Tera::new("templates/**/*").expect("Failed to render template");
-        let render_result = tera.render(&template_name.unwrap(), &ctx);
+
+        let render_result = tera.render(&template_name, &ctx);
+
         let mut output = String::new();
         output.push_str(doc["files"]["properties"]["name"].as_str().unwrap());
         output.push_str(".");
         output.push_str(doc["files"]["extension"].as_str().unwrap());
+
         let path =  Path::new(run_args.output.as_str()).join(output.as_str());
         let mut output_file = File::create(path).expect("Cant create file");
-        output_file.write_all(render_result.unwrap().as_bytes());
+        let writed =output_file.write_all(render_result.unwrap().as_bytes());
+        match writed {
+            Ok(_ok) => println!("Successfully writen"),
+            Err(_e) => println!("Error when writing")
+        }
     }
 
 }
