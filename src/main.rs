@@ -5,10 +5,12 @@ mod utils;
 
 use std::fs::File;
 use std::io::prelude::*;
+use std::process;
 use yaml_rust::{YamlLoader};
 use tera::{Context, Tera};
 use std::path::{Path};
 use handlers::react;
+
 
 fn main() {
 
@@ -45,7 +47,10 @@ fn main() {
 
         match template_name {
             react::TEMPLATE => react::fill_context(&doc, &mut ctx),
-            _ => println!("Template '{}' not exists", template_name)
+            _ => {
+                println!("Template '{}' not exists", template_name);
+                process::exit(0)
+            }
         }
 
         let tera = Tera::new("templates/**/*").expect("Failed to render template");
