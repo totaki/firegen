@@ -9,7 +9,7 @@ pub struct RunArgs {
 }
 
 pub fn get_args() -> RunArgs {
-    let matches = App::new("Firegen")
+    let matches = App::new("Snowgen")
         .version("0.1.0")
         .author("Sergey Emelyanov <karagabul@gmail.com>")
         .about("This application help create Python or ReactJS files from templates")
@@ -32,7 +32,7 @@ pub fn get_args() -> RunArgs {
 
     let input= matches
         .value_of("input")
-        .unwrap_or("./firegen.yml")
+        .unwrap_or("./snowgen.yml")
         .to_owned();
 
     let output= matches
@@ -42,7 +42,7 @@ pub fn get_args() -> RunArgs {
 
     let path= matches
         .value_of("path")
-        .unwrap_or("~/.firegen")
+        .unwrap_or("~/.snowgen")
         .to_owned();
 
     RunArgs { input, output, path }

@@ -1,5 +1,5 @@
 [package]
-name = "firegen"
+name = "snowgen"
 version = "0.1.0"
 authors = ["Sergey Emelyanov <karagabul@gmail.com>"]
 
